@@ -13,16 +13,20 @@ output:
 
 #Introduction
 
-This lab is a (brief) introduction to Conservation Planning in R, and more generally an introduction to a few ways to visualize and analyze spatial data in R. The key word is _introduction_: this exercise should give you a taste of what I think is a very powerful and flexible software that can potentially have many applications for Conservation Planning.
+This lab is a (brief) introduction to Conservation Planning in R, and more generally an introduction to a few ways to visualize and analyze spatial data in R. The key word is _introduction_: this exercise should give you a taste of a very powerful and flexible software that can potentially have many applications for Conservation Planning.
 
 ***
 ##First things first
 
 **Make sure you have downloaded and installed the latest versions of [R](https://cran.r-project.org/mirrors.html) and [Rstudio](https://www.rstudio.com/products/rstudio/download/).**
 
+## Acknowledgments 
+
+This lab is a direct adaptation of a [spatail analysis tutorial](http://jafflerbach.github.io/spatial-analysis-R/intro_spatial_data_R.html) by Jamie Afflerbach at NCEAS. The data used in the tutorial comes from NCEAS as well, and was [originally published](http://onlinelibrary.wiley.com/doi/10.1111/j.1755-263X.2009.00058.x/full) in the journal *Conservation Letters* by Ben Halpern and colleagues. Many thanks to all of those authors for their incredible work!
+
 ## Why R?
 
-Lots of digital ink has been spilled explaining the advantages (and limitations) of R. For the purposes of this class, I would say that R has a few advantages that make it potentially useful for Conservation Planning:
+Lots of digital ink has been spilled explaining the advantages (and limitations) of R. For the purposes of this class, R has a few advantages that make it potentially useful for Conservation Planning:
   
   1. It is completely open source, meaning that anyone can download and use it (for free), _and_ anyone can contribute to it. It is a living language, meaning that it is constantly being updated and improved, and is only growing in popularity. Additionally, R's open source nature means that there are a lot of practitioners willing to help each other out with code and questions. It is an active community.
   2. R allows you to create __transparent__, __fully reproducible__ analyses, facilitating knowledge-sharing. For example, I can share this code with you, and it should (likely) run just the same for you as it does for me, allowing you to see not just my results, but exactly how I got there
@@ -30,7 +34,7 @@ Lots of digital ink has been spilled explaining the advantages (and limitations)
   4. Many conservation planning tools are now implemented in R. This includes tools you are familiar with, including MaxEnt (in the 'dismo' package, which stands for distribution modeling), Marxan, Circuitscape, and other newer tools like Prioritzr, that is similar to Marxan but is fully optimized and much faster.
   
   
-Right off the bat, I want to point you to some interesting and useful CP and R resources:
+Right off the bat, here are some interesting and useful CP and R resources:
   
   * Chris Brown, a researcher at the [Australian Rivers Institute](https://www.griffith.edu.au/environment-planning-architecture/australian-rivers-institute), has a [blog](http://www.seascapemodels.org/Rstats/index.html#page_content) with some great examples of R code used in conservation planning purposes
   * The [National Center for Ecological Analysis and Synthesis](https://www.nceas.ucsb.edu/), or NCEAS, right here in our own backyard, always has a number of existing, data-driven projects going, and many of their scientists and staff work in R on spatial analysis and/or conservation planning. You can find many of their helpful R tutorials [here](https://www.nceas.ucsb.edu/scicomp/software/r). This lab is a direct adaptation of an NCEAS tutorial by Jamie Afflerbach.
@@ -42,7 +46,7 @@ Right off the bat, I want to point you to some interesting and useful CP and R r
   
 We will be utilizing some data from our previous lab on hotspots in the California Current to produce some threat layers of interest. This will be a two part lab. In the first, we will look at compiling different categories of threats, like the authors did in [Halpern et al. (2009)](http://onlinelibrary.wiley.com/doi/10.1111/j.1755-263X.2009.00058.x/full). The guiding research questions are:
 
-  **1. What are the spatial mismatches of local vs. global threats in the CA Current?**
+  **1. What is the spatial distribution of global, fishing, and land-based threats in the CA Current?**
   
   **2. (for week 2 of the lab) Where were MPAs placed? Which threats do they address?**
 
@@ -389,7 +393,7 @@ plot(hotspots,col=hotspot_cols);map('world',fill=T,add=T,col='gray80')
 
 The above showed you some of the basics of raster analysis in R. Now it's your turn to apply these tools to a related spatial analysis problem. If you remember, our guiding question for this week was:
 
-**What are the spatial mismatches of local vs. global threats in the CA Current?**
+**What is the spatial distribution of global, fishing, and land-based threats in the CA Current?**
 
 Using the table below, choose a set of threat layers (Climate, Fishing, Land-Based, or Other), and:
 
