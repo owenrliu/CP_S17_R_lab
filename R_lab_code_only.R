@@ -20,7 +20,7 @@ cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(255))
 #setting smaller margins for plotting
 par(mar=c(2,2,1,1))
 
-## ----threats,results='hide'----------------------------------------------
+## ----threats----------------------------------------------
 threats_dir <- 'E:/TA files/CP2017_Owen/R lab development/Threats_data' # Directory where all my files are. THIS WILL BE DIFFERENT FOR YOU
 threat_files <- list.files(threats_dir,full.names = T) # List the files in this folder
 threat_files # print the file names into the console
@@ -47,13 +47,13 @@ plot(all_threats,col=cols)
 ## ----data atts-----------------------------------------------------------
 all_threats
 
-## ----hist,warning=F------------------------------------------------------
+## ----hist------------------------------------------------------
 hist(all_threats,main="Cumulative Threats Frequency")
 
 ## ----cellStats-----------------------------------------------------------
 cellStats(all_threats,mean)
 
-## ----Species,results='hide'----------------------------------------------
+## ----Species----------------------------------------------
 all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
 all_spp
 plot(all_spp,col=cols)
@@ -63,7 +63,7 @@ plot(all_spp,col=cols)
 
 threats_crop <- crop(all_threats,all_spp) #Crop the threats layer to the same extent at species
 
-## ----resample,message=F--------------------------------------------------
+## ----resample--------------------------------------------------
 
 #?resample see what the resample function does
 # NOTE: the progress='text' argument is a great tool: it prints out the progress
@@ -104,7 +104,7 @@ binary_cols <- c("white","firebrick")
 plot(spp_binary,col=binary_cols,legend=F,main="Top 20% of Species Richness")
 map('world',fill=T,add=T,col='gray')
 
-## ----threat reclass,echo=F-----------------------------------------------
+## ----threat reclass-----------------------------------------------
 #?quantile what does the quantile function do?
 threat_cutoff <- quantile(threats_crop,0.8) # Find the value of the 80th percentile
 threat_maxVal <- cellStats(threats_crop,max) #find the maximum
@@ -131,7 +131,7 @@ plot(hotspots,col=hotspot_cols,legend=F,main="Hotspots");map('world',fill=T,add=
 plot(hotspots,col=hotspot_cols,ext=extent(-121,-117,32,35),main="Hotspots, SB Channel",legend=F)
 map('world',fill=T,add=T,col='gray80')
 
-## ----all code, eval=F----------------------------------------------------
+## ----all code----------------------------------------------------
 ### import data ###
 all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
 all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
