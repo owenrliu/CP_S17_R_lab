@@ -131,7 +131,7 @@ par(mar=c(2,2,1,1))
 We now read some raster data into R. We have to make sure we let R know where to find the data:
 
 ```{r threats,results='hide'}
-threats_dir <- 'E:/TA files/CP2017_Owen/R lab development/Threats_data' # Directory where all my files are
+threats_dir <- 'E:/TA files/CP2017_Owen/R lab development/Threats_data' # Directory where all my files are. THIS WILL BE DIFFERENT FOR YOU
 threat_files <- list.files(threats_dir,full.names = T) # List the files in this folder
 threat_files # print the file names into the console
 ```
@@ -364,7 +364,7 @@ Notice that I wrote and included my own function (in this case, a function that 
 
 ```{r all code, eval=F}
 ### import data ###
-all_spp <- raster("E:/TA stuff/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
+all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
 all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 
 #### Crop, resample, and reclassify ###
