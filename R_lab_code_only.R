@@ -20,13 +20,8 @@ cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(255))
 #setting smaller margins for plotting
 par(mar=c(2,2,1,1))
 
-## ----threats----------------------------------------------
-threats_dir <- 'E:/TA files/CP2017_Owen/R lab development/Threats_data' # Directory where all my files are. THIS WILL BE DIFFERENT FOR YOU
-threat_files <- list.files(threats_dir,full.names = T) # List the files in this folder
-threat_files # print the file names into the console
-
 ## ----all threats import--------------------------------------------------
-all_threats <- raster(threat_files[2])
+all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 
 ## ----all threats plot----------------------------------------------------
 plot(all_threats,col=cols)

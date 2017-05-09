@@ -126,20 +126,12 @@ cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(255))
 par(mar=c(2,2,1,1))
 ```
 
-## Read in Raster Data  
-
-We now read some raster data into R. We have to make sure we let R know where to find the data:
-
-```{r threats,results='hide'}
-threats_dir <- 'E:/TA files/CP2017_Owen/R lab development/Threats_data' # Directory where all my files are. THIS WILL BE DIFFERENT FOR YOU
-threat_files <- list.files(threats_dir,full.names = T) # List the files in this folder
-threat_files # print the file names into the console
-```
+## Read in Raster Data
 
 Let's import the raster with the cumulative threat layer. Create a raster of the first file by calling `raster()` (think of this function like `read.csv()` for raster data, if you are familiar with that function).
 
 ```{r all threats import}
-all_threats <- raster(threat_files[2])
+all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 ```
 
 ## Visualize
