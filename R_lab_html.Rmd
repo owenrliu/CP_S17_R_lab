@@ -450,3 +450,26 @@ threats_table <- cbind(layer_names,descriptions,categories)
 kable(threats_table,col.names=c("File Name","Description","Threat Category"))
 ```
 
+```{r example fishing, echo=F}
+fish_files <- list.files("E:/TA files/CP2017_Owen/R lab development/Threats_data",full.names = T)
+fish_files <- fish_files[c(10:12,23,24,28)]
+
+# stack the rasters
+fish_stack <- stack(as.list(fish_files))
+plot(fish_stack,col=cols)
+hist(fish_stack) # negative values
+
+# remove negative numbers
+fish_stack <- reclassify(fish_stack,rcl=c(-Inf,0,NA),progress="text")
+names(fish_stack) <- c("dem_d","dem_hb","dem_lb","pel_hb","pel_lb","rec")
+
+# maximum of any fishing pressure in each cell
+fish_max <- overlay(fish_stack,fun=max)
+
+plot(fish_max,col=cols);map('world',fill=T,add=T,col='gray80')
+
+library(tmap)
+tm_shape(fish_max)+
+  tm_raster("layer",legend.hist=T,
+            title="Max Fishing Threat")
+```
