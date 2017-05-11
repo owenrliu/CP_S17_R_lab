@@ -137,7 +137,7 @@ par(mar=c(2,2,1,1))
 Let's import the raster with the cumulative threat layer. Create a raster of the first file by calling `raster()` (think of this function like `read.csv()` for raster data, if you are familiar with that function).
 
 ```{r all threats import}
-all_threats <- raster("D:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
+all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 ```
 
 ## Visualize
@@ -218,7 +218,7 @@ Quickly visualizing raster data in R is nice, but the real power of raster analy
 The species data is in the Species data directory, and we import it just as we did the threats layer, by providing a full path name. We can then check its attributes.
 
 ```{r Species,results='hide'}
-all_spp <- raster("D:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
+all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
 all_spp
 plot(all_spp,col=cols)
 ```
@@ -450,48 +450,57 @@ threats_table <- cbind(layer_names,descriptions,categories)
 kable(threats_table,col.names=c("File Name","Description","Threat Category"))
 ```
 
-```{r example fishing, echo=F}
-fish_files <- list.files("D:/TA files/CP2017_Owen/R lab development/Threats_data",full.names = T)
-fish_files <- fish_files[c(10:12,23,24,28)]
+Here's an example output, investigating the fishing threats for the California Current, starting with the 6 fishing layers and calculating the *maximum* value of each pixel when they were all overlayed. The final map was made with another R package, `tmap`, which is basically the mapping equivalent of `ggplot2`. You can also easily export rasters to files and edit them in other programs to make your final figures, if you wish. See `?writeRaster`.
+
+```{r example fishing, message=F,echo=F}
+#color ramp
+cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(255)) 
+
+#files
+threat_files <- list.files("E:/TA files/CP2017_Owen/R lab development/Threats_data",full.names = T)
+fish_files <- threat_files[c(10:12,23,24,28)]
 
 # stack the rasters
 fish_stack <- stack(as.list(fish_files))
-plot(fish_stack,col=cols)
+# plot(fish_stack,col=cols,ext=extent(-125,-110,22,40))
 # hist(fish_stack) # negative values
 
 # remove negative numbers
-fish_stack <- reclassify(fish_stack,rcl=c(-Inf,0,NA),progress="text")
+fish_stack_rc <- reclassify(fish_stack,rcl=c(-Inf,0,NA)) #progress="text")
 names(fish_stack) <- c("dem_d","dem_hb","dem_lb","pel_hb","pel_lb","rec")
+plot(fish_stack,col=cols,ext=extent(-130,-105,22,48))
 
-# maximum of any fishing pressure in each cell
-fish_max <- overlay(fish_stack,fun=max)
 
-plot(fish_max,col=cols);map('world',fill=T,add=T,col='gray80')
-plot(fish_max,col=cols,ext=extent(-125,-110,22,40));map('world',fill=T,add=T,col='gray80')
+# maximum of any fishing pressure in each cell (overlay removes NAs)
+# fish_max <- overlay(fish_stack_rc,fun=max)
 
-cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(5)) 
+# what about mosaic (calc works better for max)
+fish_mosaic <- calc(fish_stack_rc,fun=max)
+
+# plot(fish_max,col=cols);map('world',fill=T,add=T,col='gray80')
+# plot(fish_max,col=cols,ext=extent(-125,-110,22,40));map('world',fill=T,add=T,col='gray80')
 
 library(tmap)
-bb<-c(-125,-110,22,40)
+library(extrafont)
+bb<-c(-133,-110,21.5,49)
 data(World)
-fishing <- tm_shape(fish_max,bbox=bb)+
+fishing <- tm_shape(fish_mosaic,bbox=bb)+
   tm_raster("layer",legend.hist=T,
-            palette="RdYlGn",n = 5,
+            palette="-RdYlGn",style="equal",
             title="Max Fishing Threat")+
   tm_shape(World)+
-    tm_borders()+
+    tm_fill(col="white")+
+  tm_layout(bg.color="lightblue",fontfamily="Rockwell")+
   tm_legend(text.size=1,
     title.size=1.2,
-    position = c("left","bottom"), 
+    position = c("left","bottom"),
     bg.color = "white", 
-    bg.alpha=.2, 
-    frame="gray50", 
-    height=.6, 
-    hist.width=.5,
-    hist.height=.2, 
-    hist.bg.color="gray60", 
+    bg.alpha=.2,
+    height=.4,
+    frame=F,
+    hist.bg.color="gray80", 
     hist.bg.alpha=.5)+
-  tm_compass(position=c("right","top"))
+  tm_compass(position=c("right","top"),type="4star")
 
 fishing
 ```
