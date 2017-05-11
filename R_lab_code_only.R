@@ -1,7 +1,7 @@
 ## ----libraries,message=F-------------------------------------------------
 # if need be, you can install the packages you don't have with the command install.packages(), 
 # with the package names in quotes:
-# install.packages("raster","rgdal","rasterVis","maps","rgeos","dplyr","RColorBrewer")
+#install.packages("raster","rgdal","rasterVis","maps","rgeos","dplyr","RColorBrewer")
 
 # Load the libraries into this R session
 library(raster)       #Main raster library with nearly all functions used in this analysis
@@ -127,7 +127,7 @@ plot(hotspots,col=hotspot_cols,ext=extent(-121,-117,32,35),main="Hotspots, SB Ch
 map('world',fill=T,add=T,col='gray80')
 
 ## ----all code----------------------------------------------------
-### import data ###
+### import data ###s
 all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
 all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 

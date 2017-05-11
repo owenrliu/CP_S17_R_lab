@@ -137,7 +137,7 @@ par(mar=c(2,2,1,1))
 Let's import the raster with the cumulative threat layer. Create a raster of the first file by calling `raster()` (think of this function like `read.csv()` for raster data, if you are familiar with that function).
 
 ```{r all threats import}
-all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
+all_threats <- raster("D:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 ```
 
 ## Visualize
@@ -218,7 +218,7 @@ Quickly visualizing raster data in R is nice, but the real power of raster analy
 The species data is in the Species data directory, and we import it just as we did the threats layer, by providing a full path name. We can then check its attributes.
 
 ```{r Species,results='hide'}
-all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
+all_spp <- raster("D:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
 all_spp
 plot(all_spp,col=cols)
 ```
@@ -362,8 +362,8 @@ Notice that I wrote and included my own function (in this case, a function that 
 
 ```{r all code, eval=F}
 ### import data ###
-all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
-all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
+all_spp <- raster("D:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
+all_threats <- raster("D:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 
 #### Crop, resample, and reclassify ###
 all_spp <- reclassify(all_spp,rcl=c(-Inf,0,NA)) # reclass 0 to NA
@@ -451,13 +451,13 @@ kable(threats_table,col.names=c("File Name","Description","Threat Category"))
 ```
 
 ```{r example fishing, echo=F}
-fish_files <- list.files("E:/TA files/CP2017_Owen/R lab development/Threats_data",full.names = T)
+fish_files <- list.files("D:/TA files/CP2017_Owen/R lab development/Threats_data",full.names = T)
 fish_files <- fish_files[c(10:12,23,24,28)]
 
 # stack the rasters
 fish_stack <- stack(as.list(fish_files))
 plot(fish_stack,col=cols)
-hist(fish_stack) # negative values
+# hist(fish_stack) # negative values
 
 # remove negative numbers
 fish_stack <- reclassify(fish_stack,rcl=c(-Inf,0,NA),progress="text")
@@ -467,9 +467,31 @@ names(fish_stack) <- c("dem_d","dem_hb","dem_lb","pel_hb","pel_lb","rec")
 fish_max <- overlay(fish_stack,fun=max)
 
 plot(fish_max,col=cols);map('world',fill=T,add=T,col='gray80')
+plot(fish_max,col=cols,ext=extent(-125,-110,22,40));map('world',fill=T,add=T,col='gray80')
+
+cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(5)) 
 
 library(tmap)
-tm_shape(fish_max)+
+bb<-c(-125,-110,22,40)
+data(World)
+fishing <- tm_shape(fish_max,bbox=bb)+
   tm_raster("layer",legend.hist=T,
-            title="Max Fishing Threat")
+            palette="RdYlGn",n = 5,
+            title="Max Fishing Threat")+
+  tm_shape(World)+
+    tm_borders()+
+  tm_legend(text.size=1,
+    title.size=1.2,
+    position = c("left","bottom"), 
+    bg.color = "white", 
+    bg.alpha=.2, 
+    frame="gray50", 
+    height=.6, 
+    hist.width=.5,
+    hist.height=.2, 
+    hist.bg.color="gray60", 
+    hist.bg.alpha=.5)+
+  tm_compass(position=c("right","top"))
+
+fishing
 ```
