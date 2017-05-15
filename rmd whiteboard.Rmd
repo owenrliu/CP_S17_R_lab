@@ -1,0 +1,38 @@
+---
+title: "rmd whiteboard"
+author: "Owen Liu"
+date: "May 15, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+```
+
+#Questions to Address
+
+As you perform analyses and do your lab writeup, please consider the following questions:
+
+  1. What are the advantages of working in a software like R, where results are transparent and reproducible?
+  2. According to your cumulative threat analyses, are there uneven distributions of costs?
+      * What are the sources of the threats in your analysis?
+      * How does the source compare to the spatial area of impact? Is there a spatial mismatch between the producer and the victim of the threats?
+      * How might you reduce this spatial mismatch (if its possible)?
+  3. If you are a conservation planner tasked with spatial management, which of the threats you identified might be mitigated with appropriate protected areas? Which threat will not be mitigated? What other types of management would you suggest instead?
+
+#Challenge Questions
+
+Depending on your proficiency with R, here are some suggestions for further analyses to explore to further develop your intuition about the questions above.
+
+###California MPAs
+
+Included in your lab data for this week are shapefiles of both the California state system of marine protected areas and California's National Marine Sanctuaries. Using functions in the `raster` and `rgdal` packages, **use the threat rasters you created and the spatial management shapefiles of protected areas to investigate the overlap of threats and current protections**
+
+  * Do the existing MPAs overlap with the threats you identified? What is the total coverage of spatial management in the California Current? What is the average level of threat inside *relative to* outside the MPA/Sanctuary boundaries?
+  * If so, does that make sense to you, given what you know about conservation planning, hotspots, and the ability of spatial management to mitigate threats? If they do not overlap, is that a good or bad thing for conservation, in your opinion?
+
+Shapefile analysis is easily done in R, but, just as in ArcGIS, its vocabularly and the kinds of spatial analyses you can do with vector as opposed to raster files are a bit different. [This tutorial](http://eco-data-science.github.io/spatial_analysis2_R/) from the eco-data-science group (by a former MESM, Casey O'Hara) is a great place to start. But, just as before, it would be helpful to first think about or sketch out how you envision performing your analysis before you begin.
+
+###Visualization
+
+Explore the `tmap` package and try making maps for your report using the options therein. The `tmap` help file (`?tmap`) has a few resources to get your started (try `vignette("tmap-nutshell"`)).

@@ -1,5 +1,6 @@
 ---
 title: "Introduction to Conservation Planning with R"
+subtitle: "ESM 270 Conservation Planning, Spring 2017"
 author: "Owen Liu"
 output:
   html_document:
@@ -353,7 +354,7 @@ plot(hotspots,col=hotspot_cols,ext=extent(-121,-117,32,35),main="Hotspots, SB Ch
 map('world',fill=T,add=T,col='gray80')
 ```
 
-Voila! Our hotspots.
+***
 
 # All of the Above
 This may have seemed like a lot to you. You may have been thinking "R seems much more complicated than just doing this in ArcMap". You are of course entitled to your opinion, but once you are a little bit familiar with R, I personally believe you will find it much easier and quicker than a lot of the clunkiness that comes along with ArcGIS. For example, here is all of the above code to make hotspots in less than 30 lines of code. I would argue this is MUCH faster than doing this analysis in Arc. And it is fully reproducible, (usually) throws understandable error messages if something goes wrong, and is easy to share with others and adapt to other data or purposes.
@@ -391,13 +392,15 @@ hotspot_cols <- c("white","lightblue","firebrick") # colors
 plot(hotspots,col=hotspot_cols);map('world',fill=T,add=T,col='gray80')
 ```
 
+***
+
 #Your Turn
 
 The above showed you some of the basics of raster analysis in R. Now it's your turn to apply these tools to a related spatial analysis problem. If you remember, our guiding question for this week was:
 
 **What is the spatial distribution of global, fishing, and land-based threats in the CA Current?**
 
-Using the table below, choose a set of threat layers (Climate, Fishing, Land-Based, or Other), and:
+Using the table below, __choose__ a set of threat layers (Climate, Fishing, Land-Based, or Other), and:
 
   1. Download the appropriate set of rasters (see Table) and load them into R.
   
@@ -452,7 +455,7 @@ kable(threats_table,col.names=c("File Name","Description","Threat Category"))
 
 Here's an example output, investigating the fishing threats for the California Current, starting with the 6 fishing layers and calculating the *maximum* value of each pixel when they were all overlayed. The final map was made with another R package, `tmap`, which is basically the mapping equivalent of `ggplot2`. You can also easily export rasters to files and edit them in other programs to make your final figures, if you wish. See `?writeRaster`.
 
-```{r example fishing, message=F,echo=F}
+```{r example fishing, message=F,fig.width=12,fig.height=12,echo=F}
 #color ramp
 cols = rev(colorRampPalette(brewer.pal(11, 'Spectral'))(255)) 
 
@@ -498,9 +501,43 @@ fishing <- tm_shape(fish_mosaic,bbox=bb)+
     bg.alpha=.2,
     height=.4,
     frame=F,
+    hist.height=.25,
     hist.bg.color="gray80", 
     hist.bg.alpha=.5)+
-  tm_compass(position=c("right","top"),type="4star")
+  tm_compass(position=c("right","top"),
+             type="4star",
+             size=6)
 
 fishing
 ```
+
+#Questions to Address
+
+As you perform analyses and do your lab writeup, please consider the following questions:
+
+  1. What are the advantages of working in a software like R, where results are transparent and reproducible?
+  2. According to your cumulative threat analyses, are there uneven distributions of costs?
+      * What are the sources of the threats in your analysis?
+      * How does the source compare to the spatial area of impact? Is there a spatial mismatch between the producer and the potential victims of the threats?
+      * How might you reduce this spatial mismatch (if it's possible)?
+  3. If you are a conservation planner tasked with spatial management, which of the threats you identified might be mitigated with appropriate protected areas? Which threat will not be mitigated? What other types of management would you suggest instead?
+
+***
+
+#Challenge Questions
+
+Depending on your proficiency with R, here are some suggestions for further analyses to explore to further develop your intuition about the questions above.
+
+###California MPAs
+
+Included in your lab data for this week are shapefiles of both the California state system of marine protected areas and California's National Marine Sanctuaries. Using functions in the `raster` and `rgdal` packages, **use the threat rasters you created and the spatial management shapefiles of protected areas to investigate the overlap of threats and current protections**
+
+  * Do the existing MPAs overlap with the threats you identified? What is the total coverage of spatial management in the California Current? 
+  * What is the average level of threat inside *relative to* outside the MPA/Sanctuary boundaries?
+  * If so, does that make sense to you, given what you know about conservation planning, hotspots, and the ability of spatial management to mitigate threats? If they do not overlap, is that a good or bad thing for conservation, in your opinion?
+
+Shapefile analysis is easily done in R, but, just as in ArcGIS, its vocabularly and the kinds of spatial analyses you can do with vector as opposed to raster files are a bit different. [This tutorial](http://eco-data-science.github.io/spatial_analysis2_R/) from the eco-data-science group (by a former MESM, Casey O'Hara) is a great place to start. But, just as before, it would be helpful to first think about or sketch out how you envision performing your analysis before you begin.
+
+###Visualization
+
+Explore the `tmap` package and try making maps for your report using the options therein. The `tmap` help file (`?tmap`) has a few resources to get your started (try `vignette("tmap-nutshell"`)).
