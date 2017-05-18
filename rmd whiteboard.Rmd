@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-
+"R:/Spring2017/ESM270/Week7_R_lab/Threats_data/full_modelnv.tif"
 ```
 
 #Questions to Address

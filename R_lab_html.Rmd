@@ -21,9 +21,11 @@ This lab is a (brief) introduction to Conservation Planning in R, and more gener
 
 **Make sure you have downloaded and installed the latest versions of [R](https://cran.r-project.org/mirrors.html) and [Rstudio](https://www.rstudio.com/products/rstudio/download/).**
 
+**You should work in a new R script (File-New File-R Script) and save it in your personal directory so you can access it later.**
+
 ## Acknowledgments 
 
-This lab is a direct adaptation of a [spatail analysis tutorial](http://jafflerbach.github.io/spatial-analysis-R/intro_spatial_data_R.html) by Jamie Afflerbach at NCEAS. The data used in the tutorial comes from NCEAS as well, and was [originally published](http://onlinelibrary.wiley.com/doi/10.1111/j.1755-263X.2009.00058.x/full) in the journal *Conservation Letters* by Ben Halpern and colleagues. Many thanks to all of those authors for their incredible work!
+This lab is a direct adaptation of a [spatial analysis tutorial](http://jafflerbach.github.io/spatial-analysis-R/intro_spatial_data_R.html) by Jamie Afflerbach at NCEAS. The data used in the tutorial comes from NCEAS as well, and was [originally published](http://onlinelibrary.wiley.com/doi/10.1111/j.1755-263X.2009.00058.x/full) in the journal *Conservation Letters* by Ben Halpern and colleagues. Many thanks to all of those authors for their incredible work!
 
 ## Why R?
 
@@ -138,6 +140,7 @@ par(mar=c(2,2,1,1))
 Let's import the raster with the cumulative threat layer. Create a raster of the first file by calling `raster()` (think of this function like `read.csv()` for raster data, if you are familiar with that function).
 
 ```{r all threats import}
+# Change this path to the path to the lab data: "R:/Spring2017/ESM270/Week7_R_lab/Threats_data/full_modelnv.tif"
 all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 ```
 
@@ -219,8 +222,11 @@ Quickly visualizing raster data in R is nice, but the real power of raster analy
 The species data is in the Species data directory, and we import it just as we did the threats layer, by providing a full path name. We can then check its attributes.
 
 ```{r Species,results='hide'}
+# Make sure the pathname to the data is correct
 all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
+
 all_spp
+
 plot(all_spp,col=cols)
 ```
 
@@ -357,14 +363,14 @@ map('world',fill=T,add=T,col='gray80')
 ***
 
 # All of the Above
-This may have seemed like a lot to you. You may have been thinking "R seems much more complicated than just doing this in ArcMap". You are of course entitled to your opinion, but once you are a little bit familiar with R, I personally believe you will find it much easier and quicker than a lot of the clunkiness that comes along with ArcGIS. For example, here is all of the above code to make hotspots in less than 30 lines of code. I would argue this is MUCH faster than doing this analysis in Arc. And it is fully reproducible, (usually) throws understandable error messages if something goes wrong, and is easy to share with others and adapt to other data or purposes.
+This may have seemed like a lot to you. You may have been thinking "R seems much more complicated than just doing this in ArcMap". However, once you are a little bit familiar with R, I personally believe you will find it much easier and quicker than a lot of the clunkiness that comes along with ArcGIS. For example, here is all of the above code to make hotspots in less than 30 lines of code. The last step (overlay and plot) is left for you (I can't give you EVERYTHING, come on...). I would argue this is MUCH faster than doing this analysis in Arc. And it is fully reproducible, (usually) throws understandable error messages if something goes wrong, and is easy to share with others and adapt to other data or purposes.
 
 Notice that I wrote and included my own function (in this case, a function that takes a raster and a given quantile, and returns a binary raster, assigning ones and zero to those cells above or below a threshold quantile). Writing your own functions is SUPER useful in R, and if you are interested, try writing your own for the next part of this lab.
 
 ```{r all code, eval=F}
 ### import data ###
-all_spp <- raster("D:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
-all_threats <- raster("D:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
+all_spp <- raster("E:/TA files/CP2017_Owen/R lab development/Species_data/ca_curr_sp_rich.tif")
+all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 
 #### Crop, resample, and reclassify ###
 all_spp <- reclassify(all_spp,rcl=c(-Inf,0,NA)) # reclass 0 to NA
@@ -386,6 +392,11 @@ all_threats_top20 <- reclassify_topx(threats_crop,quant=0.8)
 all_spp_top20 <- reclassify_topx(spp_res,quant=0.8)
 
 ### overlay and plot the hotspots ###
+## ??
+## ??
+```
+
+```{r plotspots,include=F,eval=F}
 hotspots <- overlay(all_threats_top20,all_spp_top20,fun=function(x,y){x+y})
 brks_hotspots <- seq(0,3,length.out=4) # color breakpoints
 hotspot_cols <- c("white","lightblue","firebrick") # colors
@@ -515,7 +526,7 @@ fishing
 
 As you perform analyses and do your lab writeup, please consider the following questions:
 
-  1. What are the advantages of working in a software like R, where results are transparent and reproducible?
+  1. What are the advantages of working in a software like R for Conservation Planning?
   2. According to your cumulative threat analyses, are there uneven distributions of costs?
       * What are the sources of the threats in your analysis?
       * How does the source compare to the spatial area of impact? Is there a spatial mismatch between the producer and the potential victims of the threats?
@@ -533,11 +544,43 @@ Depending on your proficiency with R, here are some suggestions for further anal
 Included in your lab data for this week are shapefiles of both the California state system of marine protected areas and California's National Marine Sanctuaries. Using functions in the `raster` and `rgdal` packages, **use the threat rasters you created and the spatial management shapefiles of protected areas to investigate the overlap of threats and current protections**
 
   * Do the existing MPAs overlap with the threats you identified? What is the total coverage of spatial management in the California Current? 
-  * What is the average level of threat inside *relative to* outside the MPA/Sanctuary boundaries?
   * If so, does that make sense to you, given what you know about conservation planning, hotspots, and the ability of spatial management to mitigate threats? If they do not overlap, is that a good or bad thing for conservation, in your opinion?
+  * What is the average level of threat inside *relative to* outside the MPA/Sanctuary boundaries?
+
 
 Shapefile analysis is easily done in R, but, just as in ArcGIS, its vocabularly and the kinds of spatial analyses you can do with vector as opposed to raster files are a bit different. [This tutorial](http://eco-data-science.github.io/spatial_analysis2_R/) from the eco-data-science group (by a former MESM, Casey O'Hara) is a great place to start. But, just as before, it would be helpful to first think about or sketch out how you envision performing your analysis before you begin.
 
 ###Visualization
 
 Explore the `tmap` package and try making maps for your report using the options therein. The `tmap` help file (`?tmap`) has a few resources to get your started (try `vignette("tmap-nutshell"`)).
+
+```{r shapefile geoprocessing, include=F,eval=F}
+require(tidyverse)
+dir_sp<-"C:/Users/oliu.MASONBEE/Documents/UCSB/TAing/Conservation Planning, S17/R lab/MPAs and NMS"
+layer_mpas <- "MPA_CA_Existing_160301"
+layer_nms <- "National Marine Sanctuaries"
+
+mpas <- readOGR(dsn=dir_sp,layer=layer_mpas,stringsAsFactors = F)
+nms <- readOGR(dsn=dir_sp,layer=layer_nms,stringsAsFactors = F)
+
+summary(mpas)
+summary(nms)
+
+## convert to longlat
+mpas <- mpas %>%
+  spTransform(CRS("+proj=longlat"))
+nms <- nms %>%
+  spTransform(CRS("+proj=longlat"))
+sp_all <- raster::union(mpas,nms)
+
+plot(sp_all);map('world',fill=T,add=T,col='gray80')
+
+## join the ID slots
+sp_all@data <- sp_all@data %>%
+  unite(IDall,NAME,MLPA_MLPAL,sep="_")
+
+#extract raster by polygons. this is a list by polygon of the raster values within it
+mpa_by_fishing <- raster::extract(fish_mosaic,sp_all,weights=F)
+names(mpa_by_fishing) <- sp_all@data$IDall
+
+```
