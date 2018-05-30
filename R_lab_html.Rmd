@@ -1,6 +1,6 @@
 ---
 title: "Introduction to Conservation Planning with R"
-subtitle: "ESM 270 Conservation Planning, Spring 2017"
+subtitle: "ESM 270 Conservation Planning, Spring 2018"
 author: "Owen Liu"
 output:
   html_document:
@@ -104,7 +104,7 @@ There are a lot of spatial packages for R, we will touch on some of them here bu
 ```{r libraries,message=F}
 # if need be, you can install the packages you don't have with the command install.packages(), 
 # with the package names in quotes:
-# install.packages("raster","rgdal","rasterVis","maps","rgeos","dplyr","RColorBrewer")
+# install.packages(c("raster","rgdal","rasterVis","maps","rgeos","dplyr","RColorBrewer"))
 
 # Load the libraries into this R session
 library(raster)       #Main raster library with nearly all functions used in this analysis
@@ -140,7 +140,7 @@ par(mar=c(2,2,1,1))
 Let's import the raster with the cumulative threat layer. Create a raster of the first file by calling `raster()` (think of this function like `read.csv()` for raster data, if you are familiar with that function).
 
 ```{r all threats import}
-# Change this path to the path to the lab data: "R:/Spring2017/ESM270/Week7_R_lab/Threats_data/full_modelnv.tif"
+# Change this path to the path to the lab data: "R:/Spring2018/ESM270/Week7_R_lab/Threats_data/full_modelnv.tif"
 all_threats <- raster("E:/TA files/CP2017_Owen/R lab development/Threats_data/full_modelnv.tif")
 ```
 
@@ -390,7 +390,6 @@ reclassify_topx <- function(rast,quant=0.8) {
 ### Find top 20%, using the code from above. We could easily choose a different quantile here. ###
 all_threats_top20 <- reclassify_topx(threats_crop,quant=0.8)
 all_spp_top20 <- reclassify_topx(spp_res,quant=0.8)
-
 ### overlay and plot the hotspots ###
 ## ??
 ## ??
@@ -520,6 +519,21 @@ fishing <- tm_shape(fish_mosaic,bbox=bb)+
              size=6)
 
 fishing
+
+##? reclassify whole stack?
+reclassify_stack<- function(stack_in,quant=0.8) {
+  stack_out <- stack(stack_in) # create the (eventual) output stack
+  for(i in 1:nlayers(stack_in)) { #for each layer in stack_in...
+    topx <- quantile(stack_in[[i]],quant) #...find the 80% quantile of the raster values,
+    maxVal <- cellStats(stack_in[[i]],max) #...find the max
+    rcl <- c(-Inf,topx,0,
+             topx,maxVal,1) # and reclassify matrix (see help file for ?reclassify)
+    stack_out[[i]] <- reclassify(stack_in[[i]],rcl=rcl) #then add it to the out stack
+  }
+  return(stack_out) # returns the new binary raster
+}
+
+# test<- reclassify_stack(fish_stack_rc)
 ```
 
 #Questions to Address
